@@ -1,6 +1,6 @@
 class Node {
-    constructor(data) {
-        this.data = data; // El objeto (ej: "Llave Dorada")
+    constructor(value) {
+        this.value = value;
         this.next = null;
     }
 }
@@ -8,32 +8,26 @@ class Node {
 export class LinkedList {
     constructor() {
         this.head = null;
-        this.size = 0;
     }
 
-    // Agregar un objeto al inventario
-    add(item) {
-        const newNode = new Node(item);
+    toArray() {
+    let arr = [];
+    let curr = this.head;
+    while(curr) {
+        arr.push(curr.value);
+        curr = curr.next;
+    }
+    return arr;
+}
+
+    add(value) {
+        const newNode = new Node(value);
         if (!this.head) {
             this.head = newNode;
         } else {
             let current = this.head;
-            while (current.next) {
-                current = current.next;
-            }
+            while (current.next) current = current.next;
             current.next = newNode;
         }
-        this.size++;
-    }
-
-    // Listar todos para mostrar en pantalla
-    toArray() {
-        let items = [];
-        let current = this.head;
-        while (current) {
-            items.push(current.data);
-            current = current.next;
-        }
-        return items;
     }
 }

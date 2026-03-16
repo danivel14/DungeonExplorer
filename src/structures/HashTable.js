@@ -1,21 +1,30 @@
-export class ItemDatabase {
-    constructor() {
-        this.items = {}; // Nuestra tabla hash simple
+// Implementación manual de Tabla Hash para el Grafo de Salas
+export class HashTable {
+    constructor(size = 50) {
+        this.buckets = new Array(size);
     }
 
-    // Insertar objeto en la tabla
-    agregarItem(id, nombre, tipo, valor) {
-        this.items[id] = { nombre, tipo, valor };
+    // Función Hash simple: convierte el ID de la sala en un índice
+    hash(key) {
+        let total = 0;
+        for (let i = 0; i < key.length; i++) {
+            total += key.charCodeAt(i);
+        }
+        return total % this.buckets.length;
     }
 
-    // Buscar objeto por ID (O(1) - Acceso instantáneo)
-    obtenerItem(id) {
-        return this.items[id] || null;
+    put(key, value) {
+        const index = this.hash(key);
+        if (!this.buckets[index]) this.buckets[index] = [];
+        this.buckets[index].push([key, value]);
+    }
+
+    get(key) {
+        const index = this.hash(key);
+        if (!this.buckets[index]) return null;
+        for (let pair of this.buckets[index]) {
+            if (pair[0] === key) return pair[1];
+        }
+        return null;
     }
 }
-
-// Ejemplo de uso inicial (puedes poner esto en main.js):
-const db = new ItemDatabase();
-db.agregarItem("p01", "Poción de Vida", "Consumible", 20);
-db.agregarItem("k01", "Llave de Bronce", "Misión", 0);
-db.agregarItem("w01", "Espada Oxidada", "Arma", 5);

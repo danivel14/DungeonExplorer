@@ -1,23 +1,25 @@
-import { Room } from './Room.js';
+import { Room } from './Room';
+import { GameAssets } from '../constants/Sprites';
+import { HashTable } from '../structures/HashTable';
 
 export class Dungeon {
     constructor() {
-        this.salas = new Map(); // Esto actuará como tu Grafo
+        this.salas = new HashTable();
         this.generarMazmorra();
     }
 
     generarMazmorra() {
-        // Creas las salas (Aquí pondrás las rutas a tus imágenes después)
-        const entrada = new Room("inicio", "Entrada de la Mazmorra", "assets/rooms/entrada.png");
-        const pasillo = new Room("pasillo", "Pasillo Sombrío", "assets/rooms/pasillo.png");
+        const entrada = new Room("inicio", "Exterior del Castillo", GameAssets.world.exterior);
+        const bosque = new Room("bosque", "Camino Real", GameAssets.world.exterior);
 
-        // Creas las conexiones (Grafo)
-        entrada.conexiones = ["pasillo"];
-        pasillo.conexiones = ["inicio"];
+        const s1 = new Room("inicio", "Entrada", require('../../assets/images/entrada.png'));
+        const s2 = new Room("pasillo", "Bosque de Hyrule", require('../../assets/images/pasillo.png'));
 
-        // Guardas en el mapa
-        this.salas.set(entrada.id, entrada);
-        this.salas.set(pasillo.id, pasillo);
+        s1.conexiones.push("pasillo");
+        s2.conexiones.push("inicio");
+
+        this.salas.put(s1.id, s1);
+        this.salas.put(s2.id, s2);
     }
 
     obtenerSala(id) {

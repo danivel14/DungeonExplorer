@@ -1,31 +1,49 @@
+// src/entities/Player.js
+import React from 'react';
+import { Image } from 'react-native';
+import { GameAssets } from '../constants/Sprites';
+
 export class Player {
-    constructor(x, y, spritePath) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 50;  // Adjust based on your PNG size
-        this.height = 50;
-        this.speed = 5;
-
-        // Load the sprite
-        this.image = new Image();
-        this.image.src = spritePath; 
+        this.width = 60;
+        this.height = 60;
+        this.estado = 'idle'; 
     }
 
-    // Logic to move the player
-    update(input) {
-        if (input.keys['ArrowUp']) this.y -= this.speed;
-        if (input.keys['ArrowDown']) this.y += this.speed;
-        if (input.keys['ArrowLeft']) this.x -= this.speed;
-        if (input.keys['ArrowRight']) this.x += this.speed;
+    mover(dir, w, h) {
+        this.estado = 'walk'; 
+        const paso = 25;
+        if (dir === 'up') this.y -= paso;
+        if (dir === 'down') this.y += paso;
+        if (dir === 'left') this.x -= paso;
+        if (dir === 'right') this.x += paso;
+        // Limitar movimiento dentro de la pantalla
+        if (this.x < 0) this.x = 0;
+        if (this.y < 50) this.y = 50;
     }
 
-    dibujar(ctx) {
-        if (this.image.complete) {
-            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        } else {
-            // Placeholder while image loads
-            ctx.fillStyle = "blue";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
+    detener() {
+        this.estado = 'idle'; 
+    }
+
+    render() {
+        const spriteActual = this.estado === 'walk' 
+            ? GameAssets.player.walk 
+            : GameAssets.player.idle;
+
+        return (
+            <Image
+                source={spriteActual}
+                style={{
+                    position: 'absolute',
+                    left: this.x,
+                    top: this.y,
+                    width: this.width,
+                    height: this.height,
+                }}
+            />
+        );
     }
 }

@@ -1,55 +1,133 @@
-import { useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  ImageBackground, 
+  TouchableOpacity, 
+  Dimensions 
+} from 'react-native';
 
-// Importamos lo que ya tienen hecho
 import { Dungeon } from './src/game/Dungeon';
+import { Player } from './src/entities/Player';
+import { Enemy } from './src/entities/Enemy';
+
+const { width, height } = Dimensions.get('window');
 
 export default function App() {
-  // Estados de React para redibujar la pantalla
   const [mazmorra] = useState(new Dungeon());
+  const [jugador] = useState(new Player(100, 200, require('./assets/sprites/player.png')));
   const [salaActual, setSalaActual] = useState(mazmorra.obtenerSala("inicio"));
-  
-  // Adaptamos el jugador de tu compañera (usa require para la imagen)
-  const [jugador, setJugador] = useState({
-    x: 100,
-    y: 200,
-    sprite: require('./assets/sprites/player.png') // Asegúrate que el archivo existe
-  });
+  const [tick, setTick] = useState(0);
 
-  const mover = (dir) => {
-    let { x, y } = jugador;
-    const velocidad = 20;
-    if (dir === 'up') y -= velocidad;
-    if (dir === 'down') y += velocidad;
-    if (dir === 'left') x -= velocidad;
-    if (dir === 'right') x += velocidad;
-    setJugador({ ...jugador, x, y });
+  // Efecto de carga
+  useEffect(() => {
+    const aldeano = new NPC(
+        "npc_01", 
+        200, 150, 
+        "Aldeano Kakariko", 
+        require('./assets/sprites/Citizen1_Idle.png')
+    );
+    
+    salaActual.npcs.add(aldeano); 
+    setTick(t => t + 1);
+
+    const slime = new Enemy(
+      "enm_01", 
+      250, 300, 
+      require('./assets/sprites/enemy.png'), 
+      2 // puntos de vida
+    );
+    salaActual.enemigos.add(slime); 
+    
+    setTick(t => t + 1); // Redibujar para mostrar al enemigo
+  }, []);
+
+
+  const manejarAccion = (dir) => {
+    jugador.mover(dir, width, height);
+
+    const listaEnemigos = salaActual.enemigos.toArray();
+    listaEnemigos.forEach(enemigo => {
+      enemigo.actualizarIA(jugador.x, jugador.y);
+      
+      // Si el enemigo está muy cerca del jugador, el jugador recibe daño
+      const distancia = Math.sqrt(
+        Math.pow(jugador.x - enemigo.x, 2) + Math.pow(jugador.y - enemigo.y, 2)
+      );
+      if (distancia < 40 && enemigo.vivo) {
+        console.log("¡Daño recibido!");
+        jugador.recibirDaño(1);
+      }
+      setTick(prev => prev + 1);
+
+      setTimeout(() => {
+        jugador.detener();
+        setTick(prev => prev + 1);
+      }, 200);
+    });
+
+    // cambio de sala (Grafo)
+    if (jugador.x > width - 60 && salaActual.conexiones.length > 0) {
+      const siguienteId = salaActual.conexiones[0]; 
+      const nuevaSala = mazmorra.obtenerSala(siguienteId);
+      if (nuevaSala) {
+        setSalaActual(nuevaSala);
+        jugador.x = 20; // Reposicionar jugador al inicio de la nueva sala
+      }
+    }
+
+    // Actualizar Interfaz
+    setTick(prev => prev + 1);
   };
 
+  // Vista
   return (
     <View style={styles.container}>
-      {/* 1. Fondo de la sala (Usamos ImageBackground de RN) */}
-      <ImageBackground source={salaActual.imagen} style={styles.background}>
+      <ImageBackground source={salaActual.imagen} style={styles.mapa}>
         
-        {/* 2. El Jugador (Sprite) */}
-        <Image 
-          source={jugador.sprite} 
-          style={[styles.sprite, { top: jugador.y, left: jugador.x }]} 
-        />
+        {/* Renderizado del Jugador (Método de la Clase) */}
+        {jugador.render()}
+        {salaActual.enemigos.toArray().map(enm => enm.render())}
+        {salaActual.npcs.toArray().map(npc => npc.render())}
 
-        {/* 3. Interfaz de usuario (HUD) */}
+        {/* HUD (Menú Interactivo / Interfaz) */}
         <View style={styles.hud}>
-          <Text style={styles.texto}>Sala: {salaActual.nombre}</Text>
+          <Text style={styles.textoHud}>📍 {salaActual.nombre}</Text>
+          <Text style={styles.textoHud}>❤️ Vida: {jugador.vida}</Text>
         </View>
 
-        {/* 4. Controles (Joystick) */}
+        {/* CONTROLES (Joystick) */}
         <View style={styles.controles}>
-          <TouchableOpacity onPress={() => mover('up')} style={styles.boton}><Text>▲</Text></TouchableOpacity>
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => mover('left')} style={styles.boton}><Text>◀</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => mover('right')} style={styles.boton}><Text>▶</Text></TouchableOpacity>
+          <TouchableOpacity 
+            onPress={() => manejarAccion('up')} 
+            style={styles.botonControl}
+          >
+            <Text style={styles.flecha}>▲</Text>
+          </TouchableOpacity>
+          
+          <View style={{ flexDirection: 'row' }}>
+            <TouchableOpacity 
+              onPress={() => manejarAccion('left')} 
+              style={styles.botonControl}
+            >
+              <Text style={styles.flecha}>◀</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              onPress={() => manejarAccion('right')} 
+              style={styles.botonControl}
+            >
+              <Text style={styles.flecha}>▶</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => mover('down')} style={styles.boton}><Text>▼</Text></TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => manejarAccion('down')} 
+            style={styles.botonControl}
+          >
+            <Text style={styles.flecha}>▼</Text>
+          </TouchableOpacity>
         </View>
 
       </ImageBackground>
@@ -58,11 +136,49 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  background: { flex: 1, width: '100%', height: '100%' },
-  sprite: { width: 50, height: 50, position: 'absolute' },
-  hud: { marginTop: 40, alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  texto: { color: 'white', fontSize: 18 },
-  controles: { position: 'absolute', bottom: 30, alignSelf: 'center', alignItems: 'center' },
-  boton: { backgroundColor: '#fff', padding: 20, margin: 5, borderRadius: 10 }
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  mapa: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  hud: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ffd700', 
+  },
+  textoHud: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'serif',
+  },
+  controles: {
+    position: 'absolute',
+    bottom: 40,
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  botonControl: {
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 5,
+    borderRadius: 35,
+    elevation: 5, 
+  },
+  flecha: {
+    fontSize: 30,
+    color: '#333',
+  }
 });
