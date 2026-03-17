@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 
-import { Dungeon } from '../../src/game/Dungeon';
-import { Player } from '../../src/entities/Player';
-import { Sprites } from '../../src/assetsManager'; 
+import { Dungeon } from '../src/game/Dungeon';
+import { Player } from '../src/entities/Player';
+import { Sprites } from '../constants/sprites';
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const [mazmorra] = useState(new Dungeon());
-  const [jugador] = useState(new Player(100, 200, Sprites.player_idle, 64, 64));
+  const [jugador] = useState(new Player(100, 200, Sprites.player_idle));
   const [salaActual, setSalaActual] = useState(mazmorra.obtenerSala("inicio"));
   const [tick, setTick] = useState(0);
 

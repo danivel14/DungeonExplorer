@@ -1,22 +1,34 @@
+// constants/sprites.js
+
 export const GameAssets = {
     // --- JUGADOR ---
-    player_idle: require('../../assets/sprites/Fighter2_Idle.png'),
-    player_walk: require('../../assets/sprites/Fighter2_Walk.png'),
-    player_attack: require('../../assets/sprites/Fighter_sword_with_shadow.png'),
+    player: {
+        idle: require('../assets/sprites/Fighter2Left_Idle.png'),
+        walk: require('../assets/sprites/Fighter2Left_Walk.png'),
+        attack: require('../assets/sprites/Fighter_sword_with_shadow.png'),
+    },
 
-    // --- ENEMIGOS  ---
-    enemy_dummy: require('../../assets/sprites/Attacked_Manequin1_with_shadow.png'),
-    enemy_fighter: require('../../assets/sprites/Fighter2_Idle_without_shadow.png'),
+    // --- ENEMIGOS ---
+    enemies: {
+        dummy: require('../assets/sprites/Attacked_Manequin1_with_shadow.png'),
+        fighter: require('../assets/sprites/Fighter2_Idle_without_shadow.png'),
+        slime: require('../assets/sprites/Attacked_Manequin3_with_shadow.png'), 
+    },
 
-    // --- CIUDADANOS (NPCs) ---
-    npc_citizen1: require('../../assets/sprites/Citizen1_Idle.png'),
-    npc_citizen2: require('../../assets/sprites/Citizen2_Idle.png'),
-    npc_citizen1_walk: require('../../assets/sprites/Citizen1_Walk.png'),
+    // --- NPCs ---
+    npcs: {
+        citizen1: require('../assets/sprites/Citizen1_Idle.png'),
+        citizen2: require('../assets/sprites/Citizen2_Idle.png'),
+    },
 
-    // --- ESCENARIOS TEMPORALES A MODIFICAR (Rooms) ---
-    room_exterior: require('../../assets/images/Exterior.png'),
-    room_cracks: require('../../assets/images/Decorative_cracks.png'),
-    
+    // --- ESCENARIOS (Rooms) ---
+    world: {
+        exterior: require('../assets/images/DungeonTileset.png'),
+        pasillo: require('../assets/images/Walls_street.png'),
+    },
+
     // --- OTROS ---
-    shadow: require('../../assets/sprites/Different_characters_shadow.png'),
+    shadow: require('../assets/sprites/Different_characters_shadow.png'),
 };
+
+export const Sprites = GameAssets;

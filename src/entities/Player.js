@@ -1,12 +1,12 @@
 // src/entities/Player.js
 import React from 'react';
 import { Image } from 'react-native';
-import { GameAssets } from '../constants/Sprites';
+import { GameAssets } from '../../constants/sprites';
 
 export class Player {
-    constructor(x, y, sprite, width = 60, height = 60) {
-        this.x = x;
-        this.y = y;
+    constructor(x=-1250, y=-1650, sprite, width = 80, height = 80) {
+        this.x = 50;
+        this.y = 650;
         this.sprite = sprite;
         this.width = width;  
         this.height = height; 

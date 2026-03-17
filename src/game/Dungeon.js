@@ -1,5 +1,5 @@
 import { Room } from './Room';
-import { GameAssets } from '../constants/Sprites';
+import { GameAssets } from '../../constants/sprites';
 import { HashTable } from '../structures/HashTable';
 
 export class Dungeon {
@@ -10,10 +10,9 @@ export class Dungeon {
 
     generarMazmorra() {
         const entrada = new Room("inicio", "Exterior del Castillo", GameAssets.world.exterior);
-        const bosque = new Room("bosque", "Camino Real", GameAssets.world.exterior);
 
-        const s1 = new Room("inicio", "Entrada", require('../../assets/images/entrada.png'));
-        const s2 = new Room("pasillo", "Bosque de Hyrule", require('../../assets/images/pasillo.png'));
+        const s1 = new Room("inicio", "Entrada", require('../../assets/images/DungeonTileset.png'));
+        const s2 = new Room("pasillo", "Bosque de Hyrule", require('../../assets/images/Walls_street.png'));
 
         s1.conexiones.push("pasillo");
         s2.conexiones.push("inicio");
