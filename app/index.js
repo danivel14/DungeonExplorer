@@ -4,11 +4,13 @@ import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, Dimensions, 
 import { Dungeon } from '../src/game/Dungeon';
 import { Player } from '../src/entities/Player';
 import { Sprites } from '../constants/sprites';
-import { GameStory } from '../src/constants/Story';
+import { GameStory } from '../constants/Story'; 
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const [mostrarIntro, setMostrarIntro] = useState(true); 
+  const [pasoStory, setPasoStory] = useState(0); 
   const [mazmorra] = useState(new Dungeon());
   const [jugador] = useState(new Player(100, 200, Sprites.player_idle));
   const [salaActual, setSalaActual] = useState(mazmorra.obtenerSala("inicio"));
