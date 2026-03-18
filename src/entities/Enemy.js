@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
+import { GameAssets } from '../../constants/sprites';
 
 /**
  * Clase Enemy: Representa a los oponentes en la mazmorra.

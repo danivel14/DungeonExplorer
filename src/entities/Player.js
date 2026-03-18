@@ -1,51 +1,24 @@
 // src/entities/Player.js
-import React from 'react';
-import { Image } from 'react-native';
-import { GameAssets } from '../constants/Sprites';
-
 export class Player {
-    constructor(x, y, sprite, width = 60, height = 60) {
+    constructor(x, y, sprite) {
         this.x = x;
         this.y = y;
         this.sprite = sprite;
-        this.width = width;  
-        this.height = height; 
+        this.speed = 20;
         this.vida = 3;
-        this.estado = 'idle';
     }
 
     mover(dir, w, h) {
-        this.estado = 'walk'; 
-        const paso = 25;
+        const paso = this.speed;
         if (dir === 'up') this.y -= paso;
         if (dir === 'down') this.y += paso;
         if (dir === 'left') this.x -= paso;
         if (dir === 'right') this.x += paso;
-        // Limitar movimiento dentro de la pantalla
+
+        // Límites básicos para no salir de la pantalla
         if (this.x < 0) this.x = 0;
-        if (this.y < 50) this.y = 50;
-    }
-
-    detener() {
-        this.estado = 'idle'; 
-    }
-
-    render() {
-        const spriteActual = this.estado === 'walk' 
-            ? GameAssets.player.walk 
-            : GameAssets.player.idle;
-
-        return (
-            <Image
-                source={spriteActual}
-                style={{
-                    position: 'absolute',
-                    left: this.x,
-                    top: this.y,
-                    width: this.width,
-                    height: this.height,
-                }}
-            />
-        );
+        if (this.y < 0) this.y = 0;
+        if (this.x > w - 80) this.x = w - 80;
+        if (this.y > h - 200) this.y = h - 200;
     }
 }
