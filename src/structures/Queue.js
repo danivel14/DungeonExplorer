@@ -1,30 +1,52 @@
-export class Queue {
-    constructor() {
-        this.items = [];
-    }
-
-    enqueue(element) {
-        this.items.push(element);
-    }
-
-    dequeue() {
-        if (this.isEmpty()) return "Underflow";
-        return this.items.shift();
-    }
-
-    isEmpty() {
-        return this.items.length === 0;
-    }
-
-    front() {
-        return this.items[0];
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.next = null;
     }
 }
 
-// Lógica de combate (ejemplo):
-// let turno = new Queue();
-// turno.enqueue("Jugador");
-// turno.enqueue("Esqueleto");
-// turno.enqueue("Murciélago");
-// Al atacar: let atacanteActual = turno.dequeue(); 
-// Y luego lo vuelves a encolar: turno.enqueue(atacanteActual);
+/**
+ * Queue: Sistema de mensajes y diálogos de Valtheria.
+ */
+export class Queue {
+    constructor() {
+        this.front = null; // salida
+        this.back = null;  // entrada
+        this.length = 0;
+    }
+
+    // Encolar: Agrega al final (O(1))
+    enqueue(value) {
+        const newNode = new Node(value);
+        if (this.length === 0) {
+            this.front = newNode;
+            this.back = newNode;
+        } else {
+            this.back.next = newNode;
+            this.back = newNode;
+        }
+        this.length++;
+    }
+
+    // Desencolar: Saca el primero (O(1))
+    dequeue() {
+        if (!this.front) return null;
+        
+        const temp = this.front;
+        this.front = this.front.next;
+        this.length--;
+        
+        if (this.length === 0) {
+            this.back = null;
+        }
+        return temp.value;
+    }
+
+    isEmpty() {
+        return this.length === 0;
+    }
+
+    peek() {
+        return this.front ? this.front.value : null;
+    }
+}

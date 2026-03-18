@@ -7,11 +7,11 @@ export const GameStory = [
     {
         title: "La Corrupción",
         text: "El Corazón fue corrompido. La torre se hundió formando una mazmorra viva. Los muertos se levantaron y surgieron los Dragones de Sombra.",
-        bg: require('../assets/images/Fire.png') 
+        bg: require('../assets/images/DungeonTileset.png') 
     },
     {
         title: "Kael: El Cartógrafo",
         text: "Eres Kael, descendiente de los Cartógrafos del Abismo. Tu misión: Mapear la mazmorra, purificar el Corazón y encontrar a tu padre desaparecido.",
-        bg: require('../assets/sprites/Fighter2Left_Idle.png')
+        bg: require('../assets/sprites/Fighter2_Idle.png')
     }
 ];

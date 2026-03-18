@@ -1,51 +1,95 @@
-// src/entities/Player.js
 import React from 'react';
-import { Image } from 'react-native';
-import { GameAssets } from '../../constants/sprites';
+import { Image, View } from 'react-native'; 
+import { Inventory } from '../systems/Inventory';
 
 export class Player {
-    constructor(x=-1250, y=-1650, sprite, width = 80, height = 80) {
-        this.x = 50;
-        this.y = 650;
-        this.sprite = sprite;
-        this.width = width;  
-        this.height = height; 
+    constructor(x, y, spriteSheet) { 
+        this.x = x;
+        this.y = y;
+        this.spriteSheet = spriteSheet; 
+        this.frameWidth = 84;  
+        this.frameHeight = 84; 
+        this.frameX = 0; 
+        this.frameY = 0; 
         this.vida = 3;
+        this.inventario = new Inventory();
         this.estado = 'idle';
     }
 
-    mover(dir, w, h) {
-        this.estado = 'walk'; 
-        const paso = 25;
-        if (dir === 'up') this.y -= paso;
-        if (dir === 'down') this.y += paso;
-        if (dir === 'left') this.x -= paso;
-        if (dir === 'right') this.x += paso;
-        // Limitar movimiento dentro de la pantalla
+    animar() {
+        this.frameX = (this.frameX + 1) % 6; 
+    }
+
+    recibirDaño(cantidad) { 
+        this.vida -= cantidad;
+        if (this.vida < 0) this.vida = 0;
+    }
+
+    mover(dir, screenWidth, screenHeight) {
+        this.estado = 'walk';
+        const paso = 15; 
+
+        if (dir === 'up') {
+            this.y -= paso;
+            this.frameY = 3; 
+        }
+        if (dir === 'down') {
+            this.y += paso;
+            this.frameY = 0; 
+        }
+        if (dir === 'left') {
+            this.x -= paso;
+            this.frameY = 1;
+        }
+        if (dir === 'right') {
+            this.x += paso;
+            this.frameY = 2; 
+        }
+
+        this.animar();
+
         if (this.x < 0) this.x = 0;
-        if (this.y < 50) this.y = 50;
+        if (this.y < 0) this.y = 0;
+        if (this.x > screenWidth - this.frameWidth) this.x = screenWidth - this.frameWidth;
+        if (this.y > screenHeight - this.frameHeight) this.y = screenHeight - this.frameHeight;
     }
 
     detener() {
-        this.estado = 'idle'; 
+        this.estado = 'idle';
+        this.frameX = 0; 
     }
 
     render() {
-        const spriteActual = this.estado === 'walk' 
-            ? GameAssets.player.walk 
-            : GameAssets.player.idle;
+    // Si por alguna razón la imagen no carga, que no se rompa la app
+    if (!this.spriteSheet) return <View style={{position:'absolute', left:this.x, top:this.y, width:50, height:50, backgroundColor:'blue'}} />;
 
-        return (
+    return (
+        <View 
+            key="player_container"
+            style={{
+                position: 'absolute',
+                left: this.x,
+                top: this.y,
+                width: 84, // Tamaño de la "ventana"
+                height: 84,
+                overflow: 'hidden', // Esto corta el resto de la hoja
+                zIndex: 500, // Lo ponemos muy alto para que nada lo tape
+                // backgroundColor: 'rgba(255,0,0,0.3)', // Puedes dejar esto para debug, luego quítalo
+            }}
+        >
             <Image
-                source={spriteActual}
+                source={this.spriteSheet}
                 style={{
-                    position: 'absolute',
-                    left: this.x,
-                    top: this.y,
-                    width: this.width,
-                    height: this.height,
+                    // IMPORTANTE: La imagen completa debe medir 84 * 6 de ancho y 84 * 4 de alto
+                    width: 504, 
+                    height: 336,
+                    // Movemos la hoja para mostrar el cuadro correcto
+                    marginLeft: -(this.frameX * 84),
+                    marginTop: -(this.frameY * 84),
                 }}
+                resizeMode="stretch" 
             />
-        );
-    }
+        </View>
+    );
+}
 }
