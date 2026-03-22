@@ -11,7 +11,7 @@ export const Sprites = {
     // --- ENEMIGOS ---
     enemies: {
         dummy: require('../assets/sprites/Attacked_Manequin1_with_shadow.png'),
-        enemy_fighter: require('../assets/sprites/Fighter2_Idle_without_shadow.png'),
+        enemy_fighter: require('../assets/sprites/Fighter_sword_without_shadow.png'),
         slime: require('../assets/sprites/Attacked_Manequin3_with_shadow.png'), 
     },
 
@@ -23,9 +23,9 @@ export const Sprites = {
 
     // --- ESCENARIOS (Rooms) ---
     world: {
-        exterior: require('../assets/images/Exterior.png'),
-        pasillo: require('../assets/images/Walls_street.png'),
-        crack: require('../assets/images/Decorative_cracks.png'),
+        interior: require('../assets/images/Interior.png'),
+        tileset: require('../assets/images/tileset.png'),
+        catacumbas: require('../assets/images/catacumbas.png')
     },
     
     items: {

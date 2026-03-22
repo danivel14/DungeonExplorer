@@ -48,9 +48,10 @@ export class Player {
 
         this.animar();
 
-        if (this.x < 0) this.x = 0;
+        if (this.x < -20) this.x = -20; // Permite salir un poco por la izquierda
         if (this.y < 0) this.y = 0;
-        if (this.x > screenWidth - this.frameWidth) this.x = screenWidth - this.frameWidth;
+        if (this.x > screenWidth - 40) this.x = screenWidth - 40; 
+        
         if (this.y > screenHeight - this.frameHeight) this.y = screenHeight - this.frameHeight;
     }
 
