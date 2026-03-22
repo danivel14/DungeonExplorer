@@ -1,6 +1,5 @@
-// constants/sprites.js
+export const Sprites = {
 
-export const GameAssets = {
     // --- JUGADOR ---
     player: {
         idle: require('../assets/sprites/Fighter2Left_Idle.png'),
@@ -29,12 +28,10 @@ export const GameAssets = {
     },
     
     items: {
-        pocion: require('../assets/sprites/Potion_Green.png'), //individual
-        pocion2: require('../assets/sprites/Potion_Pink.png'), //
+        pocion: require('../assets/sprites/Potion_Green.png'), 
+        pocion2: require('../assets/sprites/Potion_Pink.png'), 
     },
 
     // --- OTROS ---
     shadow: require('../assets/sprites/Different_characters_shadow.png'),
 };
-
-export const Sprites = GameAssets;

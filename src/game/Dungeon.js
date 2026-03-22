@@ -1,7 +1,6 @@
 import { Sprites } from '../../constants/sprites';
 import { HashTable } from '../structures/HashTable';
 import { Enemy } from '../entities/Enemy'; 
-import { Item } from '../entities/Item'; 
 import { NPC } from '../entities/NPC';
 
 export class Dungeon {

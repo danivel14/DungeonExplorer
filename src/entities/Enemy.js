@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { GameAssets } from '../../constants/sprites';
+import { Sprites } from '../../constants/sprites';
 
 export class Enemy {
     /**
