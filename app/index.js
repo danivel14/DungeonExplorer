@@ -1,14 +1,8 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { Dungeon } from '../src/game/Dungeon';
 import { Player } from '../src/entities/Player';
 import { NPC } from '../src/entities/NPC';
-=======
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
->>>>>>> eca333742af151b5042dc2db9f19531868c2cfc5
 import { Sprites } from '../constants/sprites';
 import { Player } from '../src/entities/Player';
 import { Dungeon } from '../src/game/Dungeon';
